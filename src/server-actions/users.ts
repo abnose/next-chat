@@ -1,3 +1,4 @@
+"use server";
 import { connectDB } from "@/config/db";
 import UserModel from "@/models/user-model";
 import { currentUser, EmailAddress } from "@clerk/nextjs/server";
@@ -17,6 +18,7 @@ export const getCurrentUserFromMongoDB = async () => {
       userName: clerkUser?.username,
       email: clerkUser?.emailAddresses[0].emailAddress || "",
       profilePicture: clerkUser?.imageUrl || "",
+      createdAt: clerkUser?.createdAt || "",
     };
 
     const newUser = await UserModel.create(newUserPayload);
