@@ -4,8 +4,7 @@ import { Button, Divider, Drawer, message } from "antd";
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-// import useMessageApi from "@/helpers/useMessageApi";
-import useMessage from "antd/es/message/useMessage";
+import { useMessage } from "@/context/notification-context";
 const CurrentUserInfo = ({
   currentUser,
   showCurrentUserInfo,
@@ -16,8 +15,7 @@ const CurrentUserInfo = ({
   setShowCurrentUserInfo: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [loading, setLoading] = useState(false);
-  const { notification } = useMessage();
-  //   const { notification, setMessageApi } = useMessageApi();
+  const showMessage = useMessage();
   const router = useRouter();
   const getProperty = (key: string, value: string) => {
     return (
@@ -31,17 +29,15 @@ const CurrentUserInfo = ({
   const { signOut } = useClerk();
 
   const onLogout = async () => {
-    console.log("aaaa");
-    notification("hallow", "error");
-    // try {
-    //   setLoading(true);
-    //   await signOut();
-    //   router.push("/sign-in");
-    // } catch (error) {
-    //   message.error(error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      setLoading(true);
+      await signOut();
+      router.push("/sign-in");
+    } catch (error) {
+      showMessage(error?.message, "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,7 +47,6 @@ const CurrentUserInfo = ({
       onClose={() => setShowCurrentUserInfo(false)}
       title="profile"
     >
-      {setMessageApi}
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-5 justify-center items-center">
           <img

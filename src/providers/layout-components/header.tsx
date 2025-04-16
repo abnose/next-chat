@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import CurrentUserInfo from "./current-user-info";
 
 const Header = () => {
-  connectDB();
   const [currentUser, setCurrentUser] = useState<IUserType | null>(null);
   const [showCurrentUserInfo, setShowCurrentUserInfo] =
     useState<boolean>(false);

@@ -1,8 +1,22 @@
-import { message } from "antd";
-import { useCallback, createContext, useContext } from "react";
+"use client";
+import { App, message } from "antd";
+import React, { useCallback, createContext, useContext } from "react";
 
-export const MessageContext = ({ children }) => {
-  const [messageApi, setMessageApi] = message.useMessage();
+type NotificationFunction = (
+  msg: string,
+  type: "error" | "info" | "warning"
+) => void;
+
+const MessageContext = createContext<NotificationFunction | undefined>(
+  undefined
+);
+
+export const MessageProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [messageApi, contextHolder] = message.useMessage();
 
   const notification = useCallback(
     (msg: string, type: "error" | "info" | "warning") => {
@@ -12,18 +26,23 @@ export const MessageContext = ({ children }) => {
         duration: 10,
       });
     },
-    []
+    [messageApi]
   );
 
   return (
-    <MessageContext.provider value={notification}>
-      {setMessageApi}
-      {children}
-    </MessageContext.provider>
+    <MessageContext.Provider value={notification}>
+      <App>
+        {contextHolder}
+        {children}
+      </App>
+    </MessageContext.Provider>
   );
 };
-const messageContext = createContext(undefined);
+
 export const useMessage = () => {
-  const context = useContext(messageContext);
+  const context = useContext(MessageContext);
+  if (context === undefined) {
+    throw new Error("useMessage must be used within a MessageProvider");
+  }
   return context;
 };
