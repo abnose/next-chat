@@ -4,7 +4,7 @@ import React, { useCallback, createContext, useContext } from "react";
 
 type NotificationFunction = (
   msg: string,
-  type: "error" | "info" | "warning"
+  type: "error" | "info" | "warning" | "success"
 ) => void;
 
 const MessageContext = createContext<NotificationFunction | undefined>(
@@ -19,7 +19,7 @@ export const MessageProvider = ({
   const [messageApi, contextHolder] = message.useMessage();
 
   const notification = useCallback(
-    (msg: string, type: "error" | "info" | "warning") => {
+    (msg: string, type: "error" | "info" | "warning" | "success") => {
       messageApi.open({
         type: type,
         content: msg,
