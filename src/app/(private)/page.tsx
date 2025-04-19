@@ -1,19 +1,16 @@
-// import { Button, Flex } from "antd";
-// import { UserButton } from "@clerk/nextjs";
-// import { connectDB } from "@/config/db";
-
+"use client";
 import { connectDB } from "@/config/db";
+import Chats from "./_chat-components/chats";
+import ChatArea from "./_chat-components/chat-area";
+import { Divider } from "antd";
 
-// import { getCurrentUserFromMongoDB } from "@/server-actions/users";
 export default async function Home() {
-  // const loggedInUserData = await getCurrentUserFromMongoDB();
-
-  // console.log(loggedInUserData);
   connectDB();
   return (
-    // <div className="p-10 w-full h-[100vh] text-black flex flex-col flex justify-center items-center bg-amber-200">
-    //   <UserButton />
-    // </div>
-    <div className="p-5 text-sm">HomePage</div>
+    <div className="flex h-[85vh]">
+      <Chats />
+      <Divider type="vertical" className="h-full border-gray-300" />
+      <ChatArea />
+    </div>
   );
 }
