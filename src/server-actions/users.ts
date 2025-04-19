@@ -35,26 +35,28 @@ export const getCurrentUserFromMongoDB = async () => {
 
 export const onProfilePictureUpdate = async (formData: FormData) => {
   try {
-    const file = formData.get('file') as File
-    const userId = formData.get('userId') as string
-    console.log(file, userId)
+    const file = formData.get("file") as File;
+    const userId = formData.get("userId") as string;
+
     if (!file || !userId) {
-      return { success: false, error: 'Missing image or user ID' }
+      return { success: false, error: "Missing image or user ID" };
     }
 
-    const getProfilePic = await UserModel.findOne({ _id: userId }).select('profilePicture')
-    const currentProfilePic = getProfilePic?.profilePicture || null
+    const getProfilePic = await UserModel.findOne({ _id: userId }).select(
+      "profilePicture"
+    );
+    const currentProfilePic = getProfilePic?.profilePicture || null;
 
+    const imageUrl = await saveImageToDisk(file, currentProfilePic);
 
-    const imageUrl = await saveImageToDisk(file, currentProfilePic)
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { profilePicture: imageUrl },
+      { new: true }
+    );
 
-
-    const updatedUser = await UserModel.findByIdAndUpdate(userId, { profilePicture: imageUrl }, { new: true })
-    console.log(updatedUser, 'updateUser')
-
-    return JSON.parse(JSON.stringify(updatedUser))
-
+    return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
-    console.log(error, 'error')
+    console.log(error, "error");
   }
-}
+};
