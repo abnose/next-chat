@@ -1,10 +1,7 @@
 "use server";
-import { connectDB } from "@/config/db";
 import { saveImageToDisk } from "@/helpers/uploadFile";
 import UserModel from "@/models/user-model";
 import { currentUser, EmailAddress } from "@clerk/nextjs/server";
-import { access, unlink } from "fs";
-import path from "path";
 export const getCurrentUserFromMongoDB = async () => {
   try {
     const clerkUser = await currentUser();
@@ -19,7 +16,7 @@ export const getCurrentUserFromMongoDB = async () => {
       clerkUserId: clerkUser?.id,
       name: clerkUser?.firstName + " " + clerkUser?.lastName,
       userName: clerkUser?.username,
-      email: clerkUser?.emailAddresses[0].emailAddress || "",
+      email: clerkUser?.emailAddresses[0]?.emailAddress || "",
       profilePicture: clerkUser?.imageUrl || "",
       createdAt: clerkUser?.createdAt || "",
     };
@@ -58,5 +55,14 @@ export const onProfilePictureUpdate = async (formData: FormData) => {
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
     console.log(error, "error");
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const users = await UserModel.find();
+    return JSON.parse(JSON.stringify(users));
+  } catch (error) {
+    console.log(error);
   }
 };

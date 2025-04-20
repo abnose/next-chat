@@ -1,5 +1,4 @@
 "use client";
-import { connectDB } from "@/config/db";
 import { IUserType } from "@/interfaces";
 import { getCurrentUserFromMongoDB } from "@/server-actions/users";
 import { Avatar, message } from "antd";
