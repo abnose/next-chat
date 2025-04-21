@@ -17,7 +17,6 @@ const ChatList = () => {
     try {
       const response = await getAllChats(currentUserData?._id!);
       if (!response) throw new Error("Something went wrong");
-      console.log(response);
       dispatch(SetChats(response));
     } catch (error: any) {
       notification(error?.message, "error");
@@ -25,7 +24,7 @@ const ChatList = () => {
       setLoading(false);
     }
   };
-  console.log(chats, "here");
+
   useEffect(() => {
     getChats();
   }, []);
@@ -36,7 +35,7 @@ const ChatList = () => {
           <Spin />
         </div>
       )}
-      <div className="flex flex-col gap5 mt-5">
+      <div className="flex flex-col gap-5 mt-5">
         {chats?.map((chat: any) => {
           return <ChatCard key={chat?._id} chat={chat} />;
         })}

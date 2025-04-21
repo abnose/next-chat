@@ -3,7 +3,7 @@ import ChatList from "./chat-list";
 
 const Chats = () => {
   return (
-    <div className="w-[400px] h-full">
+    <div className="w-[400px] h-full p-3">
       <ChatHeader />
       <ChatList />
     </div>

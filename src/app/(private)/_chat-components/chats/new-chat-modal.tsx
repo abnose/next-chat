@@ -1,11 +1,11 @@
 import { useMessage } from "@/context/notification-context";
 import { IUserType } from "@/interfaces";
-import { IChatState } from "@/redux/chatSlice";
+import { IChatState, SetChats } from "@/redux/chatSlice";
 import { createNewChat } from "@/server-actions/chat";
 import { getAllUsers } from "@/server-actions/users";
 import { Button, Divider, Modal, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const NewChatModal = ({
   showNewChatModal,
@@ -33,12 +33,13 @@ const NewChatModal = ({
       setLoading(false);
     }
   };
+  const dispatch = useDispatch();
 
-  const onAddToChat = (userId: string) => {
+  const onAddToChat = async (userId: string) => {
     try {
       setSelectedUserId(userId);
       setLoading(true);
-      const response = createNewChat({
+      const response = await createNewChat({
         users: [userId, currentUserData?._id],
         createdBy: currentUserData?._id,
         isGroupChat: false,
@@ -50,6 +51,8 @@ const NewChatModal = ({
       });
       if (!response) throw new Error("Something went wrong");
       notification("Chat created successfully", "success");
+      console.log(response);
+      dispatch(SetChats(response));
       setShowNewChatModal(false);
     } catch (error: any) {
       notification(error?.message, "error");

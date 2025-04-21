@@ -18,7 +18,7 @@ const ChatHeader = () => {
   ];
   return (
     <>
-      <div className="flex justify-between items-center p-3">
+      <div className="flex justify-between items-center">
         <h1 className="text-xl text-gray-500 font-bold uppercase">My Chats</h1>
         <div className="">
           <Dropdown.Button className="w-max" menu={{ items }} size="small">
@@ -26,6 +26,13 @@ const ChatHeader = () => {
           </Dropdown.Button>
         </div>
       </div>
+
+      <input
+        type="text"
+        placeholder="search chats ..."
+        className="bg-gray-100 w-full border border-gray-300 outline-none border-solid rounded-md px-2 h-14 mt-5 focus:outline-none focus:border-primary"
+      />
+
       {showNewChatModal && (
         <NewChatModal
           showNewChatModal={showNewChatModal}
