@@ -7,9 +7,13 @@ import { Divider } from "antd";
 export default function Home() {
   connectDB();
   return (
-    <div className="flex h-[85vh]">
+    <div className="flex h-[90.5vh]">
       <Chats />
-      <Divider type="vertical" className="h-full border-blue-300" />
+      <Divider
+        type="vertical"
+        style={{ height: "100% !important", padding: 0, margin: 0 }}
+        className="h-full border-1 border-orange-200"
+      />
       <ChatArea />
     </div>
   );
