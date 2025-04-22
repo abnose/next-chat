@@ -8,8 +8,10 @@ const NewMessage = () => {
   const [text, setText] = useState("");
   const { currentUserData } = useSelector((state: any) => state.user);
   const { selectedChat } = useSelector((state: any) => state.chat);
+  const inputRef = useState(null);
   const notification = useMessage();
   const onSendMessage = async () => {
+    if (!text) return;
     try {
       const dbPayload = {
         text,
@@ -34,6 +36,12 @@ const NewMessage = () => {
           onChange={(e) => setText(e.target.value)}
           type="text"
           placeholder="Type a message"
+          ref={inputRef as any}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              onSendMessage();
+            }
+          }}
           className="w-full bg-white rounded-md border-1 border-solid h-[46px] px-3 border-gray-100 focus:outline-none focus:border-gray-500"
         />
       </div>

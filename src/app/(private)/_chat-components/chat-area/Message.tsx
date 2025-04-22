@@ -1,10 +1,10 @@
 import { IMessageType } from "@/interfaces";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
+import { formatDate } from "@/helpers/date-format";
 const Message = ({ message }: { message: IMessageType }) => {
   const { selectedChat } = useSelector((state: any) => state.chat);
   const { currentUserData } = useSelector((state: any) => state.user);
-  console.log(message, "alala");
   const isLoggedInUserMessage = message.sender._id === currentUserData._id;
 
   if (isLoggedInUserMessage) {
@@ -39,7 +39,7 @@ const Message = ({ message }: { message: IMessageType }) => {
             {message.text}
           </p>
           <span className="text-gray-500 text-xs ml-auto">
-            {dayjs(message.createdAt).format("HH:mm")}
+            {formatDate(message.createdAt)}
           </span>
         </div>
       </div>

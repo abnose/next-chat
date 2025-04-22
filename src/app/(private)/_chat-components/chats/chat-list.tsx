@@ -16,7 +16,9 @@ const ChatList = () => {
     setLoading(true);
     try {
       const response = await getAllChats(currentUserData?._id!);
-      if (!response) throw new Error("Something went wrong");
+      if (!response)
+        throw new Error("Something went wrong in getting chat list");
+      console.log(response);
       dispatch(SetChats(response));
     } catch (error: any) {
       notification(error?.message, "error");
