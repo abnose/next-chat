@@ -17,8 +17,23 @@ export const sendNewMessage = async (payload: {
       sender: payload.sender,
     });
     await newMessage.save();
+
+    const existingChat = await ChatModel.findById(payload.chat);
+    const existingUnreadCounts = existingChat?.unreadCounts;
+
+    existingChat?.users.forEach((user) => {
+      const userIdInString = user.toString();
+      if (userIdInString === payload.sender) return;
+      if (existingUnreadCounts?.[userIdInString]) {
+        existingUnreadCounts[userIdInString] += 1;
+      } else {
+        existingUnreadCounts[userIdInString] = 1;
+      }
+    });
+
     await ChatModel.findByIdAndUpdate(payload.chat, {
       lastMessage: newMessage._id,
+      unreadCounts: existingUnreadCounts,
     });
 
     return { message: "Send Successfully" };
@@ -37,6 +52,34 @@ export const getAllMessages = async (chatId: string) => {
       .populate("chat");
 
     return JSON.parse(JSON.stringify(messages));
+  } catch (err: any) {
+    console.log(err);
+    return {
+      error: err.message,
+    };
+  }
+};
+
+export const readAllMessages = async ({
+  chatId,
+  userId,
+}: {
+  chatId: string;
+  userId: string;
+}) => {
+  try {
+    await MessageModel.updateMany(
+      { chat: chatId, sender: { $ne: userId }, readBy: { $nin: [userId] } },
+      { $addToSet: { readBy: userId } }
+    );
+    const existingChat = await ChatModel.findById(chatId);
+    const existingUnreadCounts = existingChat?.unreadCounts;
+    const newUnreadCounts = { ...existingUnreadCounts, [userId]: 0 };
+    await ChatModel.findByIdAndUpdate(chatId, {
+      unreadCounts: newUnreadCounts,
+    });
+
+    return { message: "Read Successfully" };
   } catch (err: any) {
     console.log(err);
     return {

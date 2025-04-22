@@ -36,6 +36,22 @@ const ChatCard = ({ chat }: { chat: IChatType }) => {
     lastMessageTime = formatDate(chat?.lastMessage?.createdAt);
   }
 
+  const onReadCounts = () => {
+    if (!chat?.unreadCounts || !chat?.unreadCounts?.[currentUserData?._id]) {
+      return null;
+    } else {
+      return (
+        <div className="bg-blue-300 border-1 border-solid border-gray-400 h-5 w-5 rounded-full flex justify-center items-center absolute right-[-20%] top-[-55%]">
+          <span className="text-xs text-white">
+            {chat?.unreadCounts?.[currentUserData?._id] > 9
+              ? "9+"
+              : chat?.unreadCounts?.[currentUserData?._id]}
+          </span>
+        </div>
+      );
+    }
+  };
+
   return (
     <div
       onClick={() => dispatch(SetSelectedChat(chat))}
@@ -53,8 +69,9 @@ const ChatCard = ({ chat }: { chat: IChatType }) => {
           </span>
         </div>
       </div>
-      <div className="">
+      <div className=" relative">
         <span className="text-xs text-gray-500">{lastMessageTime}</span>
+        {onReadCounts()}
       </div>
     </div>
   );

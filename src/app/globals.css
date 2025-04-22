@@ -25,6 +25,7 @@ body {
   color: var(--foreground);
   box-sizing: border-box;
   font-family: "Lato", sans-serif;
+  overflow: hidden;
 }
 .cl-internal-1dauvpw {
   display: none !important;
