@@ -26,6 +26,22 @@ body {
   box-sizing: border-box;
   font-family: "Lato", sans-serif;
 }
-/* .cl-internal-1dauvpw {
+.cl-internal-1dauvpw {
   display: none !important;
-} */
+}
+
+/* scroll bar scrolling */
+
+/* width */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e2e2e2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c2c2c2;
+}
