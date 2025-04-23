@@ -1,6 +1,10 @@
 "use client";
+import { useMessage } from "@/context/notification-context";
 import { IUserType } from "@/interfaces";
+import { createNewChat, createNewGroup } from "@/server-actions/chat";
 import { Button, Form, Input, Upload } from "antd";
+import { useRouter } from "next/navigation";
+
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -8,8 +12,47 @@ const GroupForm = ({ users }: { users: IUserType[] }) => {
   const { currentUserData } = useSelector((state: any) => state.user);
   const [selectedUsersIds, setSelectedUsersIds] = useState<string[]>([]);
   const [selectedProfilePicture, setSelectedProfilePicture] = useState<File>();
+  const [loading, setLoading] = useState<boolean>();
+  const notification = useMessage();
+  const router = useRouter();
+  const onFinish = async (values: any) => {
+    console.log(values);
+    try {
+      setLoading(true);
 
-  const onFinish = () => {};
+      const formData = new FormData();
+
+      const payload = {
+        groupName: values.groupName,
+        groupBio: values.groupDescription,
+        users: [...selectedUsersIds, currentUserData?._id],
+        createdBy: currentUserData?._id,
+        isGroupChat: true,
+        groupProfilePicture: {},
+      };
+
+      if (selectedProfilePicture) {
+        formData.append("file", selectedProfilePicture as File);
+      }
+      formData.append("groupName", values.groupName);
+      formData.append("groupBio", values.groupDescription);
+      formData.append(
+        "users",
+        JSON.stringify([...selectedUsersIds, currentUserData?._id])
+      );
+      formData.append("createdBy", currentUserData?._id);
+      formData.append("isGroupChat", "true");
+      const response = await createNewGroup(formData);
+      if (response.error) throw new Error(response.error);
+      notification("Group created successfully", "success");
+      router.refresh();
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="grid grid-cols-2">
@@ -81,7 +124,7 @@ const GroupForm = ({ users }: { users: IUserType[] }) => {
           </Upload>
           <div className="flex justify-end gap-5">
             <Button>Cancel</Button>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               <span className="text-primary">Create Group</span>
             </Button>
           </div>
