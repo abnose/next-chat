@@ -66,3 +66,53 @@ export const getAllChats = async (userId: string) => {
     console.log(error);
   }
 };
+
+export const getChatById = async (chatId: string) => {
+  try {
+    const chat = await ChatModel.findOne({ _id: chatId });
+    return JSON.parse(JSON.stringify(chat));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateGroup = async ({ chatId, payload }: { chatId: string, payload: any }) => {
+  console.log(chatId)
+  console.log(payload)
+
+
+  const file = payload.get("file") as File;
+
+  const groupName = payload.get("groupName") as string;
+  const groupBio = payload.get("groupBio") as string;
+  const users = JSON.parse(payload.get("users")) as any;
+  const createdBy = payload.get("createdBy") as string;
+  const isGroupChat = payload.get("isGroupChat") as string;
+
+  let imageUrl
+
+  if (typeof file === "string") {
+    imageUrl = file
+  } else {
+    const prevImageUrl = await getChatById(chatId);
+    if (prevImageUrl?.groupProfilePicture) {
+      imageUrl = await saveFileToDiskWithPath(file, "groupPic", prevImageUrl.groupProfilePicture);
+    }
+  }
+
+  const data = {
+    groupName,
+    groupBio,
+    users,
+    createdBy,
+    isGroupChat,
+    groupProfilePicture: imageUrl,
+  };
+
+  try {
+    const updatedChat = await ChatModel.findByIdAndUpdate(chatId, data);
+    return JSON.parse(JSON.stringify(updatedChat));
+  } catch (error) {
+    console.log(error);
+  }
+};

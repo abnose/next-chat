@@ -1,16 +1,30 @@
 "use client";
 import { useMessage } from "@/context/notification-context";
 import { IUserType } from "@/interfaces";
-import { createNewChat, createNewGroup } from "@/server-actions/chat";
+import {
+  createNewChat,
+  createNewGroup,
+  updateGroup,
+} from "@/server-actions/chat";
 import { Button, Form, Input, Upload } from "antd";
 import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-const GroupForm = ({ users }: { users: IUserType[] }) => {
+const GroupForm = ({
+  users,
+  initialData = null,
+}: {
+  users: IUserType[];
+  initialData?: any;
+}) => {
   const { currentUserData } = useSelector((state: any) => state.user);
-  const [selectedUsersIds, setSelectedUsersIds] = useState<string[]>([]);
+  const [selectedUsersIds, setSelectedUsersIds] = useState<string[]>(
+    initialData?.users?.filter((user: any) => user !== currentUserData?._id) ||
+      []
+  );
+
   const [selectedProfilePicture, setSelectedProfilePicture] = useState<File>();
   const [loading, setLoading] = useState<boolean>();
   const notification = useMessage();
@@ -22,17 +36,11 @@ const GroupForm = ({ users }: { users: IUserType[] }) => {
 
       const formData = new FormData();
 
-      const payload = {
-        groupName: values.groupName,
-        groupBio: values.groupDescription,
-        users: [...selectedUsersIds, currentUserData?._id],
-        createdBy: currentUserData?._id,
-        isGroupChat: true,
-        groupProfilePicture: {},
-      };
-
-      if (selectedProfilePicture) {
-        formData.append("file", selectedProfilePicture as File);
+      if (selectedProfilePicture || initialData?.groupProfilePicture) {
+        formData.append(
+          "file",
+          (selectedProfilePicture as File) || initialData?.groupProfilePicture
+        );
       }
       formData.append("groupName", values.groupName);
       formData.append("groupBio", values.groupDescription);
@@ -42,9 +50,25 @@ const GroupForm = ({ users }: { users: IUserType[] }) => {
       );
       formData.append("createdBy", currentUserData?._id);
       formData.append("isGroupChat", "true");
-      const response = await createNewGroup(formData);
+
+      let response;
+      if (initialData) {
+        response = await updateGroup({
+          chatId: initialData._id,
+          payload: formData,
+        });
+      } else {
+        response = await createNewGroup(formData);
+      }
       if (response.error) throw new Error(response.error);
-      notification("Group created successfully", "success");
+      notification(
+        `${
+          initialData
+            ? "Group update successfully"
+            : "Group created successfully"
+        }`,
+        "success"
+      );
       router.refresh();
       router.push("/");
     } catch (err) {
@@ -92,7 +116,7 @@ const GroupForm = ({ users }: { users: IUserType[] }) => {
         })}
       </div>
       <div className="">
-        <Form layout="vertical" onFinish={onFinish}>
+        <Form layout="vertical" initialValues={initialData} onFinish={onFinish}>
           <Form.Item
             name="groupName"
             label="Group Name"
@@ -125,7 +149,9 @@ const GroupForm = ({ users }: { users: IUserType[] }) => {
           <div className="flex justify-end gap-5">
             <Button>Cancel</Button>
             <Button type="primary" htmlType="submit" loading={loading}>
-              <span className="text-primary">Create Group</span>
+              <span className="text-primary">
+                {initialData ? "Update Group" : "Create Group"}
+              </span>
             </Button>
           </div>
         </Form>

@@ -42,6 +42,8 @@ export const onProfilePictureUpdate = async (formData: FormData) => {
     const getProfilePic = await UserModel.findOne({ _id: userId }).select(
       "profilePicture"
     );
+
+    console.log(getProfilePic, "getprofilePic")
     const currentProfilePic = getProfilePic?.profilePicture || null;
 
     const imageUrl = await saveImageToDisk(file, currentProfilePic);

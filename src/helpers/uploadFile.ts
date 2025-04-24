@@ -26,7 +26,7 @@ export async function saveImageToDisk(
         "public",
         "uploads",
         "profilePic",
-        currentProfilePic?.split("/")[3]
+        currentProfilePic?.split("/")[2]
       );
       try {
         access(currentFilePath, () => {
