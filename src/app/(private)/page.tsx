@@ -5,7 +5,7 @@ import ChatArea from "./_chat-components/chat-area";
 import { Divider } from "antd";
 
 export default function Home() {
-  connectDB();
+  // connectDB();
   return (
     <div className="flex h-[90.5vh]">
       <Chats />

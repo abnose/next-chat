@@ -37,30 +37,32 @@ const Header = () => {
   if (privateRoute) return <></>;
 
   return (
-    <div className="bg-blue-200 p-5 flex justify-between items-center border-b border-solid border-orange-300">
-      <div className="">
-        <h1 className="text-2xl font-bold text-orange-400 uppercase">
-          Next Chat
-        </h1>
-      </div>
-      <div className="gap-5 flex items-center">
-        <span className="text-sm">{currentUserData?.name}</span>
-        <Avatar
-          className="cursor-pointer"
-          onClick={() => {
-            setShowCurrentUserInfo(true);
-          }}
-          src={currentUserData?.profilePicture}
-        ></Avatar>
-      </div>
+    currentUserData && (
+      <div className="bg-blue-200 p-5 flex justify-between items-center border-b border-solid border-orange-300">
+        <div className="">
+          <h1 className="text-2xl font-bold text-orange-400 uppercase">
+            Next Chat
+          </h1>
+        </div>
+        <div className="gap-5 flex items-center">
+          <span className="text-sm">{currentUserData?.name}</span>
+          <Avatar
+            className="cursor-pointer"
+            onClick={() => {
+              setShowCurrentUserInfo(true);
+            }}
+            src={currentUserData?.profilePicture}
+          ></Avatar>
+        </div>
 
-      {showCurrentUserInfo && (
-        <CurrentUserInfo
-          setShowCurrentUserInfo={setShowCurrentUserInfo}
-          showCurrentUserInfo={showCurrentUserInfo}
-        />
-      )}
-    </div>
+        {showCurrentUserInfo && (
+          <CurrentUserInfo
+            setShowCurrentUserInfo={setShowCurrentUserInfo}
+            showCurrentUserInfo={showCurrentUserInfo}
+          />
+        )}
+      </div>
+    )
   );
 };
 

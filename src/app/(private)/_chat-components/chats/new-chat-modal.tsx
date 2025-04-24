@@ -85,8 +85,10 @@ const NewChatModal = ({
         {!loading && users?.length > 0 && (
           <div className="flex flex-col">
             {users?.map((user: IUserType) => {
-              const chatAlreadyCreated = chats?.find((chat: any) =>
-                chat?.users?.find((u: IUserType) => u?._id == user?._id)
+              const chatAlreadyCreated = chats?.find(
+                (chat: any) =>
+                  chat?.users?.find((u: IUserType) => u?._id == user?._id) &&
+                  !chat?.isGroupChat
               );
               if (user?._id === currentUserData?._id || chatAlreadyCreated)
                 return null;
