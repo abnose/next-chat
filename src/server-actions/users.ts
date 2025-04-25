@@ -1,4 +1,5 @@
 "use server";
+import { connectDB } from "@/config/db";
 import { saveImageToDisk } from "@/helpers/uploadFile";
 import UserModel from "@/models/user-model";
 import { currentUser, EmailAddress } from "@clerk/nextjs/server";
@@ -6,7 +7,11 @@ export const getCurrentUserFromMongoDB = async () => {
   try {
     const clerkUser = await currentUser();
 
+    await connectDB()
+
+
     const mongoUser = await UserModel.findOne({ clerkUserId: clerkUser?.id });
+
 
     if (mongoUser) {
       return JSON.parse(JSON.stringify(mongoUser));
@@ -24,6 +29,7 @@ export const getCurrentUserFromMongoDB = async () => {
     const newUser = await UserModel.create(newUserPayload);
     return JSON.parse(JSON.stringify(newUser));
   } catch (error: any) {
+    console.log(error)
     return {
       error: error.message,
     };

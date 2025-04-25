@@ -4,7 +4,8 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         currentUserData: null,
-        currentUserId: ''
+        currentUserId: '',
+        onLineUsers: []
     },
     reducers: {
         SetCurrentUserData: (state, action) => {
@@ -12,16 +13,20 @@ const userSlice = createSlice({
         },
         SetCurrentUserId: (state, action) => {
             state.currentUserId = action.payload
+        },
+        SetOnLineUsers: (state, action) => {
+            state.onLineUsers = action.payload
         }
     }
 })
 
 
-export const { SetCurrentUserData, SetCurrentUserId } = userSlice.actions
+export const { SetCurrentUserData, SetCurrentUserId, SetOnLineUsers } = userSlice.actions
 
 export default userSlice
 
 export interface UserState {
     currentUserData: IUserType | null,
-    currentUserId: string
+    currentUserId: string,
+    onLineUsers: string[]
 }

@@ -4,7 +4,9 @@ import { IChatState, SetSelectedChat } from "@/redux/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const ChatCard = ({ chat }: { chat: IChatType }) => {
-  const { currentUserData } = useSelector((state: any) => state.user);
+  const { currentUserData, onLineUsers } = useSelector(
+    (state: any) => state.user
+  );
   const dispatch = useDispatch();
   const { selectedChat }: IChatState = useSelector((state: any) => state.chat);
   let chatName = "";
@@ -52,6 +54,20 @@ const ChatCard = ({ chat }: { chat: IChatType }) => {
     }
   };
 
+  const onLineIndicator = () => {
+    if (chat?.isGroupChat) return null;
+
+    const recipientId = chat.users.find(
+      (user: any) => user._id !== currentUserData._id
+    )?._id;
+
+    if (onLineUsers?.includes(recipientId)) {
+      return <div className="bg-green-500 h-2 w-2 rounded-full"></div>;
+    } else {
+      return <></>;
+    }
+  };
+
   return (
     <div
       onClick={() => dispatch(SetSelectedChat(chat))}
@@ -62,7 +78,9 @@ const ChatCard = ({ chat }: { chat: IChatType }) => {
       <div className="flex gap-5 items-center">
         <img src={chatImage} alt="" className="w-10 h-10 rounded-full" />
         <div className="flex flex-col gap-1">
-          <span className="text-gray-700 text-sm">{chatName}</span>
+          <span className="text-gray-700 text-sm gap-2 flex items-center">
+            {chatName} {onLineIndicator()}
+          </span>
           <span className="text-gray-500 text-xs">
             {lastMessageSenderName}
             {lastMessage}

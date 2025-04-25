@@ -7,7 +7,8 @@ import CurrentUserInfo from "./current-user-info";
 import { useMessage } from "@/context/notification-context";
 import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { SetCurrentUserData } from "@/redux/userSlice";
+import { SetCurrentUserData, SetOnLineUsers } from "@/redux/userSlice";
+import socket from "@/config/socket-config";
 const Header = () => {
   // const [currentUser, setCurrentUser] = useState<IUserType | null>(null);
   const [showCurrentUserInfo, setShowCurrentUserInfo] =
@@ -28,6 +29,19 @@ const Header = () => {
   useEffect(() => {
     getCurrentUser();
   }, []);
+
+  useEffect(() => {
+    if (currentUserData) {
+      socket.emit("join", currentUserData._id);
+
+      console.log(currentUserData);
+
+      socket.on("online-user-update", (users) => {
+        console.log(users, "all on line users");
+        dispath(SetOnLineUsers(users));
+      });
+    }
+  }, [currentUserData]);
 
   const pathname = usePathname();
 

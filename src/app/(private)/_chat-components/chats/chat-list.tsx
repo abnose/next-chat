@@ -15,11 +15,9 @@ const ChatList = () => {
   const getChats = async () => {
     setLoading(true);
     try {
-      console.log(currentUserData?._id, "before");
       const response = await getAllChats(currentUserData?._id!);
       if (!response)
         throw new Error("Something went wrong in getting chat list");
-      console.log(response, "response");
       dispatch(SetChats(response));
     } catch (error: any) {
       notification(error?.message, "error");

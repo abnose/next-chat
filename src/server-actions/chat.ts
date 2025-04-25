@@ -47,7 +47,6 @@ export const createNewGroup = async (formData: any) => {
 };
 
 export const getAllChats = async (userId: string) => {
-  console.log(await ChatModel.find({ users: { $in: [userId] } }))
   try {
     const chats = await ChatModel.find({
       users: { $in: [userId] },

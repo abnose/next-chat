@@ -8,6 +8,7 @@ import { useMessage } from "@/context/notification-context";
 import { useDispatch, useSelector } from "react-redux";
 import { onProfilePictureUpdate } from "@/server-actions/users";
 import { SetCurrentUserData, UserState } from "@/redux/userSlice";
+import socket from "@/config/socket-config";
 const CurrentUserInfo = ({
   showCurrentUserInfo,
   setShowCurrentUserInfo,
@@ -35,6 +36,7 @@ const CurrentUserInfo = ({
   const onLogout = async () => {
     try {
       setLoading(true);
+      socket.emit("logout", currentUserData._id);
       await signOut();
       router.push("/sign-in");
       showMessage("Logged out successfully", "success");
