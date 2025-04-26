@@ -34,7 +34,7 @@ const Messages = () => {
   }, [selectedChat]);
 
   useEffect(() => {
-    socket.on("new-message-receive", (message) => {
+    socket.on("new-message-received", (message) => {
       if (selectedChat?._id == message?.chat?._id) {
         setMessages((prev) => {
           const isMessageExist = prev?.find(
