@@ -2,18 +2,19 @@ import { useMessage } from "@/context/notification-context";
 import { IMessageType } from "@/interfaces";
 import { getAllMessages, readAllMessages } from "@/server-actions/messages";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Message from "./Message";
 import socket from "@/config/socket-config";
+import { SetChats } from "@/redux/chatSlice";
 
 const Messages = () => {
   const [messages, setMessages] = useState<IMessageType[]>();
   const [loading, setLoading] = useState(false);
   const messagesDivRef = useRef();
-  const { selectedChat } = useSelector((state: any) => state.chat);
+  const { selectedChat, chats } = useSelector((state: any) => state.chat);
   const notification = useMessage();
   const { currentUserData } = useSelector((state) => state.user);
-
+  const dispatch = useDispatch();
   const getMessages = async () => {
     try {
       setLoading(true);
@@ -31,6 +32,18 @@ const Messages = () => {
       chatId: selectedChat?._id,
     });
     getMessages();
+
+    const newChats = chats.map((chat) => {
+      if (chat._id === selectedChat._id) {
+        let chatData = { ...chat };
+        chatData.unreadCounts = { ...chatData.unreadCounts };
+        chatData.unreadCounts[currentUserData._id] = 0;
+        return chatData;
+      }
+      return chat;
+    });
+
+    dispatch(SetChats(newChats));
   }, [selectedChat]);
 
   useEffect(() => {
@@ -52,6 +65,24 @@ const Messages = () => {
       messagesDivRef.current.scrollTop =
         messagesDivRef.current.scrollHeight + 100;
     }
+
+    readAllMessages({
+      userId: currentUserData?._id,
+      chatId: selectedChat?._id,
+    });
+    getMessages();
+
+    const newChats = chats.map((chat) => {
+      if (chat._id === selectedChat._id) {
+        let chatData = { ...chat };
+        chatData.unreadCounts = { ...chatData.unreadCounts };
+        chatData.unreadCounts[currentUserData._id] = 0;
+        return chatData;
+      }
+      return chat;
+    });
+
+    dispatch(SetChats(newChats));
   }, [messages]);
 
   return (

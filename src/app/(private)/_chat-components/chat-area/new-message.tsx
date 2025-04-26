@@ -3,7 +3,7 @@ import { useMessage } from "@/context/notification-context";
 import { sendNewMessage } from "@/server-actions/messages";
 import { Button } from "antd";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const NewMessage = () => {
@@ -41,6 +41,13 @@ const NewMessage = () => {
       notification(error.message, "error");
     }
   };
+
+  useEffect(() => {
+    socket.emit("typing", {
+      chat: selectedChat,
+      senderId: currentUserData?._id,
+    });
+  }, [text, selectedChat]);
 
   return (
     <div className="p-3 bg-gray-100 border-1 border-solid border-gray-200 flex gap-5">

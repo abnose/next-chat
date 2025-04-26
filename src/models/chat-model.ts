@@ -36,6 +36,10 @@ const chatSchema = new mongoose.Schema(
       type: Object,
       default: {},
     },
+    lastMessageAt: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
@@ -44,8 +48,8 @@ if (mongoose.models && mongoose.models["chats"]) {
   mongoose.deleteModel("chats");
 }
 
-if (!mongoose.models['message']) {
-  require('./message-model');
+if (!mongoose.models["message"]) {
+  require("./message-model");
 }
 
 const ChatModel = mongoose.model("chats", chatSchema);

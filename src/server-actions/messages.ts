@@ -36,6 +36,7 @@ export const sendNewMessage = async (payload: {
     await ChatModel.findByIdAndUpdate(payload.chat, {
       lastMessage: newMessage._id,
       unreadCounts: existingUnreadCounts,
+      lastMessageAt: new Date().toISOString(),
     });
 
     return { message: "Send Successfully" };

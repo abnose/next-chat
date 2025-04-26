@@ -60,7 +60,7 @@ export const getAllChats = async (userId: string) => {
           path: "sender",
         },
       })
-      .sort({ updatedAt: -1 });
+      .sort({ lastMessageAt: -1 });
     return JSON.parse(JSON.stringify(chats));
   } catch (error) {
     console.log(error);
@@ -76,10 +76,15 @@ export const getChatById = async (chatId: string) => {
   }
 };
 
-export const updateGroup = async ({ chatId, payload }: { chatId: string, payload: any }) => {
-  console.log(chatId)
-  console.log(payload)
-
+export const updateGroup = async ({
+  chatId,
+  payload,
+}: {
+  chatId: string;
+  payload: any;
+}) => {
+  console.log(chatId);
+  console.log(payload);
 
   const file = payload.get("file") as File;
 
@@ -89,14 +94,18 @@ export const updateGroup = async ({ chatId, payload }: { chatId: string, payload
   const createdBy = payload.get("createdBy") as string;
   const isGroupChat = payload.get("isGroupChat") as string;
 
-  let imageUrl
+  let imageUrl;
 
   if (typeof file === "string") {
-    imageUrl = file
+    imageUrl = file;
   } else {
     const prevImageUrl = await getChatById(chatId);
     if (prevImageUrl?.groupProfilePicture) {
-      imageUrl = await saveFileToDiskWithPath(file, "groupPic", prevImageUrl.groupProfilePicture);
+      imageUrl = await saveFileToDiskWithPath(
+        file,
+        "groupPic",
+        prevImageUrl.groupProfilePicture
+      );
     }
   }
 

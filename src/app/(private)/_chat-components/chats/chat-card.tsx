@@ -39,7 +39,11 @@ const ChatCard = ({ chat }: { chat: IChatType }) => {
   }
 
   const onReadCounts = () => {
-    if (!chat?.unreadCounts || !chat?.unreadCounts?.[currentUserData?._id]) {
+    if (
+      !chat?.unreadCounts ||
+      !chat?.unreadCounts?.[currentUserData?._id] ||
+      chat._id == selectedChat?._id
+    ) {
       return null;
     } else {
       return (
