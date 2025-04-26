@@ -1,7 +1,7 @@
 import { useMessage } from "@/context/notification-context";
 import { IMessageType } from "@/interfaces";
 import { getAllMessages, readAllMessages } from "@/server-actions/messages";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Message from "./Message";
 import socket from "@/config/socket-config";
@@ -9,6 +9,7 @@ import socket from "@/config/socket-config";
 const Messages = () => {
   const [messages, setMessages] = useState<IMessageType[]>();
   const [loading, setLoading] = useState(false);
+  const messagesDivRef = useRef();
   const { selectedChat } = useSelector((state: any) => state.chat);
   const notification = useMessage();
   const { currentUserData } = useSelector((state) => state.user);
@@ -46,8 +47,15 @@ const Messages = () => {
     });
   }, [selectedChat]);
 
+  useEffect(() => {
+    if (messagesDivRef.current) {
+      messagesDivRef.current.scrollTop =
+        messagesDivRef.current.scrollHeight + 100;
+    }
+  }, [messages]);
+
   return (
-    <div className="flex-1 p-3 overflow-y-scroll">
+    <div className="flex-1 p-3 overflow-y-scroll" ref={messagesDivRef}>
       <div className="flex flex-col gap-3">
         {messages?.map((message: IMessageType) => (
           <Message key={message._id} message={message} />

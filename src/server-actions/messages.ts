@@ -8,6 +8,7 @@ export const sendNewMessage = async (payload: {
   img?: string;
   chat: string;
   sender: string;
+  socketMessageId: string;
 }) => {
   try {
     const newMessage = new MessageModel({
@@ -15,6 +16,7 @@ export const sendNewMessage = async (payload: {
       image: payload.img,
       chat: payload.chat,
       sender: payload.sender,
+      socketMessageId: payload.socketMessageId,
     });
     await newMessage.save();
 

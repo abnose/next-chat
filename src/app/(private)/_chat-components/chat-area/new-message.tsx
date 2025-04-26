@@ -30,13 +30,12 @@ const NewMessage = () => {
 
       socket.emit("send-new-message", socketPayload);
 
-      // const dbPayload = {
-      //   ...commonPayload,
-      //   sender: currentUserData._id!,
-      //   chat: selectedChat?._id!,
-      // };
-      // const response = await sendNewMessage(dbPayload);
-      // if (response?.error) throw new Error(response.error);
+      const dbPayload = {
+        ...commonPayload,
+        sender: currentUserData._id!,
+        chat: selectedChat?._id!,
+      };
+      await sendNewMessage(dbPayload);
       setText("");
     } catch (error: any) {
       notification(error.message, "error");
