@@ -49,7 +49,8 @@ const ChatList = () => {
       let chatToUpdate = prevChats[indexOfChatToUpdate];
 
       if (
-        chatToUpdate.lastMessage.socketMessageId === newMessage.socketMessageId
+        chatToUpdateCopy?.lastMessage.socketMessageId ===
+        newMessage.socketMessageId
       )
         return;
 

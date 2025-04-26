@@ -5,6 +5,7 @@ import socket from "@/config/socket-config";
 
 const Recipient = () => {
   const [typing, setTyping] = useState(false);
+  const [senderName, setSenderName] = useState("");
   const { selectedChat } = useSelector((state: any) => state.chat);
   const [showRecipientInfo, setShowRecipientInfo] = useState(false);
   let chatName = "";
@@ -23,18 +24,29 @@ const Recipient = () => {
 
   const typingAnimation = () => {
     if (typing)
-      return <span className="text-green-700 text-xs">Typing ...</span>;
+      return (
+        <span className="text-green-700 text-xs">
+          {selectedChat?.isGroupChat && senderName?.split(" ")[0] + " Is"}
+          Typing ...
+        </span>
+      );
   };
 
   useEffect(() => {
-    socket.on("typing", (chat: any) => {
-      if (chat?._id === selectedChat?._id) {
-        setTyping(true);
-        setTimeout(() => {
-          setTyping(false);
-        }, 3000);
+    socket.on(
+      "typing",
+      ({ chat, senderName }: { chat: any; senderName: string }) => {
+        if (chat?._id === selectedChat?._id) {
+          setTyping(true);
+          setTimeout(() => {
+            setTyping(false);
+          }, 3000);
+          if (chat.isGroupChat) {
+            setSenderName(senderName);
+          }
+        }
       }
-    });
+    );
 
     return () => {
       socket.off("typing");

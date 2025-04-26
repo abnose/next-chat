@@ -46,6 +46,7 @@ const NewMessage = () => {
     socket.emit("typing", {
       chat: selectedChat,
       senderId: currentUserData?._id,
+      senderName: currentUserData?.name,
     });
   }, [text, selectedChat]);
 
