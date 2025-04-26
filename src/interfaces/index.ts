@@ -26,6 +26,7 @@ export interface IChatType {
 
 export interface IMessageType {
   _id: string;
+  socketMessageId: string;
   chat: IChatType;
   sender: IUserType;
   text: string;

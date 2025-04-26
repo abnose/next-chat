@@ -4,6 +4,7 @@ import { getAllMessages, readAllMessages } from "@/server-actions/messages";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Message from "./Message";
+import socket from "@/config/socket-config";
 
 const Messages = () => {
   const [messages, setMessages] = useState<IMessageType[]>();
@@ -29,6 +30,20 @@ const Messages = () => {
       chatId: selectedChat?._id,
     });
     getMessages();
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("new-message-receive", (message) => {
+      if (selectedChat?._id == message?.chat?._id) {
+        setMessages((prev) => {
+          const isMessageExist = prev?.find(
+            (msg) => msg.socketMessageId === message.socketMessageId
+          );
+          if (isMessageExist) return prev;
+          else return [...prev, message];
+        });
+      }
+    });
   }, [selectedChat]);
 
   return (
