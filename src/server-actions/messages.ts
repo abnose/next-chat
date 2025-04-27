@@ -2,10 +2,11 @@
 
 import MessageModel from "@/models/message-model";
 import ChatModel from "@/models/chat-model";
+import { saveFileToDiskWithPath } from "@/helpers/uploadFile";
 
 export const sendNewMessage = async (payload: {
   text?: string;
-  img?: string;
+  image?: string;
   chat: string;
   sender: string;
   socketMessageId: string;
@@ -13,7 +14,7 @@ export const sendNewMessage = async (payload: {
   try {
     const newMessage = new MessageModel({
       text: payload.text,
-      image: payload.img,
+      image: payload.image,
       chat: payload.chat,
       sender: payload.sender,
       socketMessageId: payload.socketMessageId,
@@ -85,6 +86,20 @@ export const readAllMessages = async ({
     return { message: "Read Successfully" };
   } catch (err: any) {
     console.log(err);
+    return {
+      error: err.message,
+    };
+  }
+};
+
+export const uploadImage = async (formData: any) => {
+  try {
+    const file = formData.get("file") as File;
+    const imageUrl = await saveFileToDiskWithPath(file, "chatImage");
+    return {
+      imageUrl,
+    };
+  } catch (err: any) {
     return {
       error: err.message,
     };

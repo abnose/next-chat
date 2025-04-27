@@ -11,9 +11,18 @@ const Message = ({ message }: { message: IMessageType }) => {
     return (
       <div className="flex justify-end gap-2">
         <div className="flex flex-col gap-1">
-          <p className="bg-blue-950 text-white py-2 px-5 rounded-xl rounded-br-none">
-            {message.text}
-          </p>
+          {message.text && (
+            <p className="bg-blue-950 text-white py-2 px-5 rounded-xl rounded-br-none">
+              {message.text}
+            </p>
+          )}
+          {message.image && (
+            <img
+              src={message.image}
+              alt="message-image"
+              className="w-32 h-32 rounded-xl rounded-br-none object-cover"
+            />
+          )}
           <span className="text-gray-500 text-xs mr-auto">
             {dayjs(message.createdAt).format("HH:mm")}
           </span>
@@ -35,9 +44,18 @@ const Message = ({ message }: { message: IMessageType }) => {
         />
         <div className="flex flex-col gap-1">
           <span className="text-sm text-blue-300">{message.sender.name}</span>
-          <p className="bg-gray-200 py-2 px-5 rounded-xl rounded-bl-none">
-            {message.text}
-          </p>
+          {message.text && (
+            <p className="bg-gray-200 py-2 px-5 rounded-xl rounded-bl-none">
+              {message.text}
+            </p>
+          )}
+          {message.image && (
+            <img
+              src={message.image}
+              alt="message-image"
+              className="w-32 h-32 rounded-xl rounded-bl-none object-cover"
+            />
+          )}
           <span className="text-gray-500 text-xs ml-auto">
             {formatDate(message.createdAt)}
           </span>

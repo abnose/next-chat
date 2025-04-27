@@ -51,8 +51,8 @@ const ChatList = () => {
       let chatToUpdateCopy: IChatType = { ...chatToUpdate };
 
       if (
-        chatToUpdateCopy?.lastMessage.socketMessageId ===
-        newMessage.socketMessageId
+        chatToUpdateCopy?.lastMessage?.socketMessageId ===
+        newMessage?.socketMessageId
       )
         return;
 

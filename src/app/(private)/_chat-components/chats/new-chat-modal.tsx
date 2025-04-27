@@ -67,16 +67,16 @@ const NewChatModal = ({
 
   return (
     <Modal
-      title={null}
+      title={"Create New Chat"}
       open={showNewChatModal}
       onCancel={() => setShowNewChatModal(false)}
       footer={null}
       centered
     >
       <div className="flex flex-col gap-3">
-        <h1 className="text-primary text-center text-xl font-bol uppercase border-b-1 pb-2 border-gray-200">
+        {/* <h1 className="text-primary text-center text-xl font-bol uppercase border-b-1 pb-2 border-gray-200">
           Create New Chat
-        </h1>
+        </h1> */}
         {loading && !selectedUserId && (
           <div className="flex justify-center text-xl mt-20">
             <Spin />

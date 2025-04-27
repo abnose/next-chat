@@ -1,24 +1,42 @@
 import socket from "@/config/socket-config";
 import { useMessage } from "@/context/notification-context";
-import { sendNewMessage } from "@/server-actions/messages";
+import { sendNewMessage, uploadImage } from "@/server-actions/messages";
 import { Button } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import EmojiPicker from "emoji-picker-react";
+import ImageSelector from "./image-selector";
 const NewMessage = () => {
   const [text, setText] = useState("");
   const { currentUserData } = useSelector((state: any) => state.user);
   const { selectedChat } = useSelector((state: any) => state.chat);
   const inputRef = useState(null);
+  const [loading, setLoading] = useState(false);
   const notification = useMessage();
   const onSendMessage = async () => {
     try {
-      if (!text) return;
+      if (!text && !selectedImage) return;
+
+      setLoading(true);
+      setShowEmojiPicker(false);
+      setText("");
+
+      let image: any = "";
+
+      if (selectedImage) {
+        const formData = new FormData();
+        formData.append("file", selectedImage);
+        const res = await uploadImage(formData);
+        image = res?.imageUrl;
+      }
+
+      console.log(image, "image");
+      alert(image);
 
       const commonPayload = {
         text,
-        image: "",
+        image,
         socketMessageId: dayjs().unix(),
       };
 
@@ -36,10 +54,10 @@ const NewMessage = () => {
         chat: selectedChat?._id!,
       };
       await sendNewMessage(dbPayload);
-      setShowEmojiPicker(false);
-      setText("");
     } catch (error: any) {
       notification(error.message, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,10 +70,11 @@ const NewMessage = () => {
   }, [text, selectedChat]);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
+  const [showImageSelector, setShowImageSelector] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   return (
     <div className="p-3 bg-gray-100 border-1 border-solid border-gray-200 flex gap-5 relative">
-      <div className="">
+      <div className="flex gap-3">
         {showEmojiPicker && (
           <div className=" absolute left-0 bottom-20">
             <EmojiPicker
@@ -73,6 +92,13 @@ const NewMessage = () => {
           ) : (
             <i className="ri-emoji-sticker-line"></i>
           )}
+        </Button>
+
+        <Button
+          onClick={() => setShowImageSelector(true)}
+          className="border-gray-300"
+        >
+          <i className="ri-folder-image-line"></i>
         </Button>
       </div>
       <div className="flex-1">
@@ -93,6 +119,17 @@ const NewMessage = () => {
       <Button type="primary" onClick={onSendMessage}>
         <i className="ri-send-plane-fill"></i>
       </Button>
+
+      {showImageSelector && (
+        <ImageSelector
+          showImageSelector={showImageSelector}
+          setShowImageSelector={setShowImageSelector}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+          onSend={onSendMessage}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };
