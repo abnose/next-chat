@@ -6,7 +6,11 @@ const Message = ({ message }: { message: IMessageType }) => {
   const { selectedChat } = useSelector((state: any) => state.chat);
   const { currentUserData } = useSelector((state: any) => state.user);
   const isLoggedInUserMessage = message.sender._id === currentUserData._id;
+  let read = false;
 
+  if (selectedChat?.users?.length - 1 == message?.readBy?.length) {
+    read = true;
+  }
   if (isLoggedInUserMessage) {
     return (
       <div className="flex justify-end gap-2">
@@ -23,9 +27,16 @@ const Message = ({ message }: { message: IMessageType }) => {
               className="w-32 h-32 rounded-xl rounded-br-none object-cover"
             />
           )}
-          <span className="text-gray-500 text-xs mr-auto">
-            {dayjs(message.createdAt).format("HH:mm")}
-          </span>
+          <div className="flex justify-between">
+            <span className="text-gray-500 text-xs mr-auto">
+              {dayjs(message.createdAt).format("HH:mm")}
+            </span>
+            <i
+              className={`ri-check-double-line ${
+                read ? "text-blue-500" : "text-gray-500"
+              }`}
+            ></i>
+          </div>
         </div>
         <img
           src={message.sender.profilePicture}

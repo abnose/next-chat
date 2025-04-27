@@ -63,7 +63,7 @@ const ChatList = () => {
 
       if (
         newMessage.sender._id !== currentUserData?._id &&
-        selcetedChat?._id !== newMessage.chat._id
+        selcetedChat?._id !== newMessage.chat?._id
       ) {
         chatToUpdateCopy.unreadCounts[currentUserData?._id!] =
           (chatToUpdateCopy.unreadCounts[currentUserData?._id!] || 0) + 1;
@@ -73,7 +73,7 @@ const ChatList = () => {
 
       prevChats = [
         prevChats[indexOfChatToUpdate],
-        ...prevChats.filter((chat) => chat._id !== newMessage.chat._id),
+        ...prevChats.filter((chat) => chat._id !== newMessage.chat?._id),
       ];
 
       dispatch(SetChats(prevChats));

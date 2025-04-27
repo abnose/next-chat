@@ -31,13 +31,13 @@ const NewMessage = () => {
         image = res?.imageUrl;
       }
 
-      console.log(image, "image");
-      alert(image);
-
       const commonPayload = {
         text,
         image,
         socketMessageId: dayjs().unix(),
+        createdAt: dayjs().toISOString(),
+        updatedAt: dayjs().toISOString(),
+        readBy: [],
       };
 
       const socketPayload = {
