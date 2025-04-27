@@ -13,7 +13,7 @@ const ChatList = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { currentUserData } = useSelector((state: any) => state.user);
-  const { chats, selcetedChat }: IChatState = useSelector(
+  const { chats, selectedChat }: IChatState = useSelector(
     (state: any) => state.chat
   );
   const notification = useMessage();
@@ -41,7 +41,7 @@ const ChatList = () => {
       let prevChats = [...chats];
 
       let indexOfChatToUpdate = prevChats.findIndex(
-        (chat) => chat._id === newMessage.chat._id
+        (chat) => chat?._id === newMessage.chat?._id
       );
 
       if (indexOfChatToUpdate == -1) return;
@@ -63,7 +63,7 @@ const ChatList = () => {
 
       if (
         newMessage.sender._id !== currentUserData?._id &&
-        selcetedChat?._id !== newMessage.chat?._id
+        selectedChat?._id !== newMessage.chat?._id
       ) {
         chatToUpdateCopy.unreadCounts[currentUserData?._id!] =
           (chatToUpdateCopy.unreadCounts[currentUserData?._id!] || 0) + 1;
@@ -73,12 +73,12 @@ const ChatList = () => {
 
       prevChats = [
         prevChats[indexOfChatToUpdate],
-        ...prevChats.filter((chat) => chat._id !== newMessage.chat?._id),
+        ...prevChats.filter((chat) => chat?._id !== newMessage.chat?._id),
       ];
 
       dispatch(SetChats(prevChats));
     });
-  }, [selcetedChat]);
+  }, [selectedChat]);
 
   return (
     <div className="">

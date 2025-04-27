@@ -22,5 +22,5 @@ export default chatSlice;
 
 export interface IChatState {
   chats: IChatType[];
-  selcetedChat: IChatType | null;
+  selectedChat: IChatType | null;
 }

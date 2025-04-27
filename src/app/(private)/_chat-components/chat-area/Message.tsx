@@ -11,6 +11,7 @@ const Message = ({ message }: { message: IMessageType }) => {
   if (selectedChat?.users?.length - 1 == message?.readBy?.length) {
     read = true;
   }
+
   if (isLoggedInUserMessage) {
     return (
       <div className="flex justify-end gap-2">
