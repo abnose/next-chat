@@ -25,7 +25,6 @@ const NewChatModal = ({
       setLoading(true);
       const response = await getAllUsers();
       if (!response) throw new Error("No Users Found");
-      console.log(response);
       setUsers(response);
     } catch (error: any) {
       notification(error?.message, "error");
@@ -51,7 +50,6 @@ const NewChatModal = ({
       });
       if (!response) throw new Error("Something went wrong");
       notification("Chat created successfully", "success");
-      console.log(response);
       dispatch(SetChats(response));
       setShowNewChatModal(false);
     } catch (error: any) {

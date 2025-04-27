@@ -7,11 +7,9 @@ export const getCurrentUserFromMongoDB = async () => {
   try {
     const clerkUser = await currentUser();
 
-    await connectDB()
-
+    await connectDB();
 
     const mongoUser = await UserModel.findOne({ clerkUserId: clerkUser?.id });
-
 
     if (mongoUser) {
       return JSON.parse(JSON.stringify(mongoUser));
@@ -29,7 +27,7 @@ export const getCurrentUserFromMongoDB = async () => {
     const newUser = await UserModel.create(newUserPayload);
     return JSON.parse(JSON.stringify(newUser));
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
     return {
       error: error.message,
     };
@@ -49,7 +47,6 @@ export const onProfilePictureUpdate = async (formData: FormData) => {
       "profilePicture"
     );
 
-    console.log(getProfilePic, "getprofilePic")
     const currentProfilePic = getProfilePic?.profilePicture || null;
 
     const imageUrl = await saveImageToDisk(file, currentProfilePic);

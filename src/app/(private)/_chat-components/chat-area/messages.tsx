@@ -27,7 +27,6 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    console.log("first use effect");
     readAllMessages({
       userId: currentUserData?._id,
       chatId: selectedChat?._id,
@@ -49,13 +48,7 @@ const Messages = () => {
   }, [selectedChat]);
 
   useEffect(() => {
-    console.log("second use effect");
-
     socket.on("new-message-received", (message) => {
-      // console.log(selectedChat?._id, message?.chat?._id);
-      // console.log(message?.chat?._id, "message?.chat?._id");
-      // console.log(selectedChat?._id, "selectedChat?._id");
-
       if (selectedChat?._id == message?.chat?._id) {
         setMessages((prev) => {
           const isMessageExist = prev?.find(

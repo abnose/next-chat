@@ -83,9 +83,6 @@ export const updateGroup = async ({
   chatId: string;
   payload: any;
 }) => {
-  console.log(chatId);
-  console.log(payload);
-
   const file = payload.get("file") as File;
 
   const groupName = payload.get("groupName") as string;

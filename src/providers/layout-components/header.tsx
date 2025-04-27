@@ -15,12 +15,12 @@ const Header = () => {
     useState<boolean>(false);
   const showMessage = useMessage();
   const { currentUserData } = useSelector((state: any) => state.user);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const getCurrentUser = async () => {
     try {
       const response = await getCurrentUserFromMongoDB();
       if (response.error) throw new Error(response.error);
-      dispath(SetCurrentUserData(response as IUserType));
+      dispatch(SetCurrentUserData(response as IUserType));
     } catch (error: any) {
       showMessage(error.message, "error");
     }
@@ -34,11 +34,8 @@ const Header = () => {
     if (currentUserData) {
       socket.emit("join", currentUserData._id);
 
-      console.log(currentUserData);
-
       socket.on("online-user-update", (users) => {
-        console.log(users, "all on line users");
-        dispath(SetOnLineUsers(users));
+        dispatch(SetOnLineUsers(users));
       });
     }
   }, [currentUserData]);

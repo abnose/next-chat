@@ -19,7 +19,7 @@ const CurrentUserInfo = ({
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { currentUserData } = useSelector((state: any) => state.user);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const showMessage = useMessage();
   const router = useRouter();
   const getProperty = (key: string, value: string) => {
@@ -56,8 +56,7 @@ const CurrentUserInfo = ({
       formData.append("file", selectedFile as File);
       formData.append("userId", currentUserData._id); // Add user ID to FormData
       const response = await onProfilePictureUpdate(formData);
-      console.log(response);
-      dispath(SetCurrentUserData(response as UserState));
+      dispatch(SetCurrentUserData(response as UserState));
       showMessage("Profile picture updated successfully", "success");
       setShowCurrentUserInfo(false);
     } catch (error: any) {

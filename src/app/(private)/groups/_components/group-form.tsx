@@ -30,7 +30,6 @@ const GroupForm = ({
   const notification = useMessage();
   const router = useRouter();
   const onFinish = async (values: any) => {
-    console.log(values);
     try {
       setLoading(true);
 
@@ -72,7 +71,6 @@ const GroupForm = ({
       router.refresh();
       router.push("/");
     } catch (err) {
-      console.log(err);
     } finally {
       setLoading(false);
     }
