@@ -48,13 +48,13 @@ const ChatList = () => {
 
       let chatToUpdate = prevChats[indexOfChatToUpdate];
 
+      let chatToUpdateCopy: IChatType = { ...chatToUpdate };
+
       if (
         chatToUpdateCopy?.lastMessage.socketMessageId ===
         newMessage.socketMessageId
       )
         return;
-
-      let chatToUpdateCopy: IChatType = { ...chatToUpdate };
 
       chatToUpdateCopy.lastMessage = newMessage;
       chatToUpdateCopy.updatedAt = newMessage.createdAt;

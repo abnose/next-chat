@@ -5,7 +5,7 @@ import { Button } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import EmojiPicker from "emoji-picker-react";
 const NewMessage = () => {
   const [text, setText] = useState("");
   const { currentUserData } = useSelector((state: any) => state.user);
@@ -36,6 +36,7 @@ const NewMessage = () => {
         chat: selectedChat?._id!,
       };
       await sendNewMessage(dbPayload);
+      setShowEmojiPicker(false);
       setText("");
     } catch (error: any) {
       notification(error.message, "error");
@@ -50,9 +51,30 @@ const NewMessage = () => {
     });
   }, [text, selectedChat]);
 
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
   return (
-    <div className="p-3 bg-gray-100 border-1 border-solid border-gray-200 flex gap-5">
-      <div className=""></div>
+    <div className="p-3 bg-gray-100 border-1 border-solid border-gray-200 flex gap-5 relative">
+      <div className="">
+        {showEmojiPicker && (
+          <div className=" absolute left-0 bottom-20">
+            <EmojiPicker
+              onEmojiClick={(e) => setText((prev) => prev + e.emoji)}
+              height={350}
+            />
+          </div>
+        )}
+        <Button
+          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          className="border-gray-300"
+        >
+          {showEmojiPicker ? (
+            <i className="ri-close-fill"></i>
+          ) : (
+            <i className="ri-emoji-sticker-line"></i>
+          )}
+        </Button>
+      </div>
       <div className="flex-1">
         <input
           value={text}
@@ -69,7 +91,7 @@ const NewMessage = () => {
         />
       </div>
       <Button type="primary" onClick={onSendMessage}>
-        SEND
+        <i className="ri-send-plane-fill"></i>
       </Button>
     </div>
   );
