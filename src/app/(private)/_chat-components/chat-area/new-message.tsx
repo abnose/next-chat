@@ -11,7 +11,6 @@ const NewMessage = () => {
   const [text, setText] = useState("");
   const { currentUserData } = useSelector((state: any) => state.user);
   const { selectedChat } = useSelector((state: any) => state.chat);
-  const inputRef = useState(null);
   const [loading, setLoading] = useState(false);
   const notification = useMessage();
   const onSendMessage = async () => {
@@ -107,7 +106,6 @@ const NewMessage = () => {
           onChange={(e) => setText(e.target.value)}
           type="text"
           placeholder="Type a message"
-          ref={inputRef as any}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               onSendMessage();

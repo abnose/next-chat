@@ -69,7 +69,7 @@ const RecipientInfo = ({
             </Button>
           </div>
           {selectedChat?.users?.map((user: any) => (
-            <div className="flex gap-5 items-center">
+            <div key={user?._id} className="flex gap-5 items-center">
               <img
                 src={user?.profilePicture}
                 alt=""

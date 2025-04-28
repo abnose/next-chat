@@ -89,7 +89,7 @@ const NewChatModal = ({
                   !chat?.isGroupChat
               );
               if (user?._id === currentUserData?._id || chatAlreadyCreated)
-                return null;
+                return <div key={user?._id}></div>;
               return (
                 <>
                   <div
