@@ -7,6 +7,7 @@ const Recipient = () => {
   const [typing, setTyping] = useState(false);
   const [senderName, setSenderName] = useState("");
   const { selectedChat } = useSelector((state: any) => state.chat);
+  const { currentUserData } = useSelector((state: any) => state.user);
   const [showRecipientInfo, setShowRecipientInfo] = useState(false);
   let chatName = "";
   let chatImage = "";
@@ -16,8 +17,9 @@ const Recipient = () => {
     chatImage = selectedChat?.groupProfilePicture;
   } else {
     const otherUser = selectedChat?.users?.find(
-      (user: any) => user?._id !== selectedChat?._id
+      (user: any) => user?._id !== currentUserData?._id
     );
+
     chatName = otherUser?.name!;
     chatImage = otherUser?.profilePicture!;
   }

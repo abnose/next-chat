@@ -62,6 +62,8 @@ const Messages = () => {
       }
     });
 
+    console.log(selectedChat);
+
     socket.on("user-read-all-chat-messages", ({ chatId, readByUserId }) => {
       if (selectedChat?._id == chatId) {
         setMessages((prev) => {
