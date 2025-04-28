@@ -7,7 +7,6 @@ const Message = ({ message }: { message: IMessageType }) => {
   const { currentUserData } = useSelector((state: any) => state.user);
   const isLoggedInUserMessage = message.sender._id === currentUserData._id;
   let read = false;
-
   if (selectedChat?.users?.length - 1 == message?.readBy?.length) {
     read = true;
   }

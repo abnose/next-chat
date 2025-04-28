@@ -14,7 +14,7 @@ const Content = ({ children }: { children: React.ReactNode }) => {
     return <Loader />;
   }
 
-  return <div className="">{children}</div>;
+  return <div className="h-[90vh]">{children}</div>;
 };
 
 export default Content;

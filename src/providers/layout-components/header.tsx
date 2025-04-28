@@ -49,7 +49,7 @@ const Header = () => {
 
   return (
     currentUserData && (
-      <div className="bg-blue-200 p-5 flex justify-between items-center border-b border-solid border-orange-300">
+      <div className="bg-blue-200 p-5 h-[10vh] flex justify-between items-center border-b border-solid border-orange-300">
         <div className="">
           <h1 className="text-2xl font-bold text-orange-400 uppercase">
             Next Chat
