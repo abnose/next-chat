@@ -23,7 +23,7 @@ const RecipientInfo = ({
     chatImage = selectedChat?.groupProfilePicture;
   } else {
     const recipient = selectedChat?.users.find(
-      (user) => user._id !== selectedChat?._id
+      (user) => user._id !== currentUserData?._id
     );
     chatName = recipient?.name;
     chatImage = recipient?.profilePicture;

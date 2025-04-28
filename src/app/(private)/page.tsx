@@ -11,7 +11,7 @@ export default function Home() {
       <Chats />
       <Divider
         type="vertical"
-        style={{ height: "100% !important", padding: 0, margin: 0 }}
+        style={{ height: "100%", padding: 0, margin: 0 }}
         className="h-full border-1 border-orange-200"
       />
       <ChatArea />
