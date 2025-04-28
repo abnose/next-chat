@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "./Message";
 import socket from "@/config/socket-config";
 import { SetChats } from "@/redux/chatSlice";
-
+let thisSelectedChat: any;
 const Messages = () => {
   const [messages, setMessages] = useState<IMessageType[]>();
   const [loading, setLoading] = useState(false);
@@ -48,8 +48,10 @@ const Messages = () => {
   }, [selectedChat]);
 
   useEffect(() => {
+    thisSelectedChat = { ...selectedChat };
+
     socket.on("new-message-received", (message) => {
-      if (selectedChat?._id == message?.chat?._id) {
+      if (thisSelectedChat?._id == message?.chat?._id) {
         setMessages((prev) => {
           const isMessageExist = prev?.find(
             (msg) => msg.socketMessageId === message.socketMessageId
